@@ -11,7 +11,7 @@
             <div class="card-body">
                 <p class="card-title mb-0">My Profile</p>
                 <div class="container justify-content-center align-items-center" style="min-height: 100vh;">
-                    <div class="col-lg-7">
+                    <div class="col-lg-12 text-center">
                             @if (Session::has('success'))
                                  <div class="alert alert-success">
                                     <p>{{Session::get('success')}}</p>                               
@@ -22,11 +22,10 @@
                                     <p>{{Session::get('error')}}</p>                               
                                 </div>                                
                             @endif
-                        </div>
+                    </div>
                     <div class="card profile-card shadow ">
                         <div class="card-body text-center">
-                            <img src="{{ asset('uploads/profile_images/'.$user->image)}}" alt="User Profile"
-                                style="height: 250px; object-fit: cover;">
+                            <img src="{{ $user->image ? asset('uploads/profile_images/' . $user->image) : asset('uploads/profile_images/default-avatar.jpg') }}" alt="User Profile" style="height: 250px; border-radius:50%; object-fit: cover;">
                             <form action="{{ route('updateUser',$user->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">

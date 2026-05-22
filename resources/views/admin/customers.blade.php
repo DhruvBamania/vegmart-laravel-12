@@ -20,19 +20,17 @@
                                 <th>Profile Image</th>
                                 <th>Name</th>
                                 <th>Email</th>
-                                <th>Registration Date</th>
                                 <th>Status</th>
+                                <th>Registration Date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @php $sr=1 @endphp
                             @foreach ($customers as $customer)
-                                
-                            @endforeach
                             <tr>
                                 <td>{{$sr++}}</td>
-                                <td><img src="{{ asset('uploads/profile_images/'.$customer->image)}}"width="100px" alt=""></td>                                                                   
+                                <td><img src="{{ $customer->image ? asset('uploads/profile_images/' . $customer->image) : asset('uploads/profile_images/default-avatar.jpg') }}"width="100px" alt=""></td>                                                                   
                                 <td>{{$customer->name}}</td>                                                                   
                                 <td>{{$customer->email}}</td>                                                                   
                                 <td class="font-weight-bold">{{$customer->status}}</td>                                                                   
@@ -47,7 +45,7 @@
                                 @endif                                                                 
                                                                                                 
                             </tr>
-
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

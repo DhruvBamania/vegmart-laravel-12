@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class discount extends Model
+{
+    //
+    protected $fillable = 
+    [
+        'code', 
+        'type', 
+        'value', 
+        'limit', 
+        'used', 
+        'expiry_date'
+    ];
+}

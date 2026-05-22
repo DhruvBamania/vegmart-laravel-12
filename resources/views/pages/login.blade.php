@@ -12,7 +12,7 @@
                 <li class="breadcrumb-item active text-white">Login</li>
             </ol>
         </div>
-<!-- Single Page Header End -->
+<!-- Single Page Header End --> 
 
         <!-- Login Start -->
 
@@ -38,12 +38,20 @@
                             @endif
                             <form action="{{ route('loginUser') }}" method="POST" enctype="multipart/form-data" class="">
                                 @csrf
-                                <input type="email" name='email' class="w-100 form-control border-0 py-3 mb-4" placeholder="Enter Your Email" required>
-                                <input type="password" name='password' class="w-100 form-control border-0 py-3 mb-4" placeholder="Enter Your Password" required>
-                                
+                                <input type="text" name='login_identity' value="{{old('login_identity')}}" class="w-100 form-control border-0 py-3 mb-4" placeholder="Enter Your Email or Phone" >
+                                @error('login_identity') <small class="text-danger mb-4">{{ $message }}</small> @enderror
+                                <input type="password" name='password' class="w-100 form-control border-0 py-3 mb-4" placeholder="Enter Your Password" >
+                                @error('password') <small class="text-danger mb-4">{{ $message }}</small> @enderror
                                 <button class="w-100 btn form-control border-secondary py-3 bg-white text-primary " name="login" type="submit">Login</button>
                                 <p>Don't have an account?<a href="{{ route('register') }}"> Register Now</a></p>
                             </form>
+                            <div class="text-center mt-3">
+                                <p>Or</p>
+                               <a href="{{ route('google.login') }}" class="btn btn-outline-success w-100 py-3">
+                                    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" style="width: 30px; margin-right: 8px; border-radius: 50%;">
+                                    Sign in with Google
+                                </a>
+                            </div>
                         </div>
                        
                         </div>

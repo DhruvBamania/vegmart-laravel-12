@@ -99,7 +99,7 @@
                                                 style=".description-column {max-width: 250px;white-space: normal;word-wrap: break-word;}">
                                                     {{ $product->description }}
                                                 </td>
-                                                <td>${{ $product->price }}</td>
+                                                <td>₹ {{ $product->price }}</td>
                                                 <td>{{ $product->quantity }}</td>
                                                 <td>
 {{-- Sub category Update modal --}}

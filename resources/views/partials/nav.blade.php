@@ -1,3 +1,32 @@
+@push('styles')
+    .nav-link-profile::after {
+        display: none !important;
+    }
+
+    /* 2. Desktop Behavior: Hover to show menu */
+    @media (min-width: 992px) {
+        #profile-container:hover #desktop-dropdown {
+            display: block;
+            margin-top: 0;
+        }
+    }
+
+    /* 3. Mobile Behavior: Hide the dropdown menu entirely 
+       (User will be redirected to Profile page on click) */
+    @media (max-width: 991.98px) {
+        #desktop-dropdown {
+            display: none !important;
+        }
+        
+        /* Ensure the icon is easy to tap on mobile */
+        .nav-link-profile {
+            padding: 10px;
+            display: block;
+        }
+    }
+@endpush
+
+
 <!-- Spinner Start -->
 <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
     <div class="spinner-grow text-primary" role="status"></div>
@@ -12,16 +41,16 @@
                         <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">Thaltej, Ahmedabad - 380061</a></small>
                         <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">fruitable.contact@gmail.com</a></small>
                     </div>
-                    <div class="top-link pe-2">
+                   <!--  <div class="top-link pe-2">
                         <a href="#" class="text-white"><small class="text-white mx-2">Privacy Policy</small>/</a>
                         <a href="#" class="text-white"><small class="text-white mx-2">Terms of Use</small>/</a>
                         <a href="#" class="text-white"><small class="text-white ms-2">Sales and Refunds</small></a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="container px-0">
                 <nav class="navbar navbar-light bg-white navbar-expand-xl">
-                    <a href="index.html" class="navbar-brand"><h1 class="text-primary display-6">Fruitables</h1></a>
+                    <a class="navbar-brand" href="{{route('home')}}"><img src="{{asset('admin/images/vegmart_Logo.png')}}" style="height: 120px;" alt="logo"/></a>
                     <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                         <span class="fa fa-bars text-primary"></span>
                     </button>
@@ -29,42 +58,40 @@
                         <div class="navbar-nav mx-auto">
                             <a href="{{route('home')}}" class="nav-item nav-link {{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
                             <a href="{{route('shop')}}" class="nav-item nav-link {{ request()->routeIs('shop') ? 'active' : '' }}">Shop</a>
-                            {{-- <a href="{{route('shop-detail')}}" class="nav-item nav-link {{ request()->routeIs('shop-detail') ? 'active' : '' }}">Shop Detail</a> --}}
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                                <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                                    <a href="{{ route('cart') }}" class="dropdown-item {{ request()->routeIs('cart') ? 'active' : '' }}">Cart</a>
-                                    <a href="{{route('checkout')}}" class="dropdown-item {{ request()->routeIs('checkout') ? 'active' : '' }}">Checkout</a>
-                                    <a href="{{route('testimonial')}}" class="dropdown-item {{ request()->routeIs('testimonial') ? 'active' : '' }}">Testimonial</a>
-                                    <a href="{{route('404')}}" class="dropdown-item {{ request()->routeIs('404') ? 'active' : '' }}">404 Page</a>
-                                </div>
-                            </div>
+                            
                             <a href="{{route('contact')}}" class="nav-item nav-link {{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a>
                         </div>
                         <div class="d-flex m-3 me-0">
-                            <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search text-primary"></i></button>
-                            <a href="{{route('cart')}}" class="position-relative me-4 my-auto">
+                           <a href="{{route('cart.show')}}" class="position-relative me-4 my-auto">
                                 <i class="fa fa-shopping-bag fa-2x"></i>
-                                <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
-                            </a>
-                            <!-- Profile start -->
-                             <div class="nav-item dropdown">
-                                <a href="#" class="my-auto">
-                                    <i class="fas fa-user fa-2x"></i>
+                                @auth
+                                @php $count = auth()->user()->cartItems()->sum('quantity'); @endphp
+                                @if($count > 0)
+                                    <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">
+                                        {{ $count }}
+                                    </span>
+                                @endif
+                            @endauth
                                 </a>
-                                <div class="dropdown-menu m-0 px-1 bg-secondary rounded-0">
-                                    @if (Session::has('id'))
-                                        <a href="{{ route('profile') }}" class="dropdown-item {{ request()->routeIs('login') ? 'active' : '' }}">My Account</a>
-                                        <a href="{{route('logout')}}" class="dropdown-item {{ request()->routeIs('register') ? 'active' : '' }}">Log Out</a>
-                                    @else
-                                    <a href="{{ route('login') }}" class="dropdown-item {{ request()->routeIs('login') ? 'active' : '' }}">Login</a>
-                                    <a href="{{route('register')}}" class="dropdown-item {{ request()->routeIs('register') ? 'active' : '' }}">Register</a>
-                                    @endif
-                                </div>
-                            </div>
-                            {{-- <a href="#" class="my-auto">
-                                <i class="fas fa-user fa-2x"></i>
-                            </a> --}}
+                            <!-- Profile start -->
+                             <div class="nav-item dropdown" id="profile-container">
+    <a href="{{ route('profile') }}" class="my-auto nav-link-profile" id="profileIcon">
+        <i class="fas fa-user fa-2x"></i>
+    </a>
+    
+    {{-- Dropdown menu - Only shown on Desktop via CSS --}}
+    <div class="dropdown-menu m-0 px-1 bg-secondary rounded-0 border-0 dropdown-menu-end" id="desktop-dropdown">
+        @if (Auth::check())
+            <a href="{{ route('profile') }}" class="dropdown-item {{ request()->routeIs('profile') ? 'active' : '' }}">My Account</a>
+            <a href="{{ route('view.orders') }}" class="dropdown-item {{ request()->routeIs('view.orders') ? 'active' : '' }}">Your Orders</a>
+            <div class="dropdown-divider"></div>
+            <a href="{{ route('logout') }}" class="dropdown-item">Log Out</a>
+        @else
+            <a href="{{ route('login') }}" class="dropdown-item {{ request()->routeIs('login') ? 'active' : '' }}">Login</a>
+            <a href="{{ route('register') }}" class="dropdown-item {{ request()->routeIs('register') ? 'active' : '' }}">Register</a>
+        @endif
+    </div>
+</div>
                             <!-- Profile end -->
                         </div>
                     </div>
@@ -73,21 +100,4 @@
         </div>
         <!-- Navbar End -->
 
-        <!-- Modal Search Start -->
-        <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-fullscreen">
-                <div class="modal-content rounded-0">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body d-flex align-items-center">
-                        <div class="input-group w-75 mx-auto d-flex">
-                            <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                            <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Modal Search End -->
+       
