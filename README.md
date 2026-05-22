@@ -20,6 +20,7 @@
 - [Screenshots](#screenshots)
 - [Contributing](#contributing)
 - [Contact](#contact)
+- [License](#-license)
 
 ---
 
