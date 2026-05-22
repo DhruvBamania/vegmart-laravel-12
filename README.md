@@ -2,32 +2,29 @@
 
 ![Laravel](https://img.shields.io/badge/Laravel-12-red?style=for-the-badge&logo=laravel)
 ![PHP](https://img.shields.io/badge/PHP-8.2-blue?style=for-the-badge&logo=php)
-![Status](https://img.shields.io/badge/Status-Work%20in%20Progress-orange?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)
 
-> **Note:** This is a Laravel 12 based ecommerce project (frontend + backend + admin panel). The repository already contains a `.gitignore`. This project is functional in UI and admin/product management flows, but some features are not yet implemented (see *Current Limitations* below).
+> **Note:** This is a Laravel 12 based ecommerce project (frontend + backend + admin panel). The repository already contains a 
 
 ---
 
 ## 📚 Table of Contents
 - [About](#about)
 - [Features](#features)
-- [Current Limitations](#current-limitations)
 - [Tech Stack](#tech-stack)
 - [Admin Login Instructions](#admin-login-instructions)
 - [Quickstart — Run Locally](#quickstart--run-locally)
 - [Project Structure](#project-structure)
-- [Database & Migrations](#database--migrations)
 - [Assets, Uploads & Storage](#assets--uploads)
 - [Deployment Notes](#deployment-notes)
 - [Screenshots](#screenshots)
-- [Future Enhancements](#future-enhancements)
 - [Contributing](#contributing)
 - [Contact](#contact)
 
 ---
 
 ## About
-**Vegmart** (placeholder name — rename as desired) is an e-grocery web application built with **Laravel 12**. It allows selling groceries — fruits, vegetables, meat, bread, milk, etc. — and includes an **admin control panel** (accessible via authentication) to manage categories, subcategories and products.
+**Vegmart**  is an e-grocery web application built with **Laravel 12**. It allows selling groceries — fruits, vegetables, meat, bread, milk, etc. — and includes an **admin control panel** (accessible via authentication) to manage categories, subcategories and products.
 
 ---
 
@@ -51,18 +48,12 @@
 
 ---
 
-## Current Limitations
-- 🗣️ **Testimonials**: UI available; functionality (posting/approval flow) is not fully implemented.
-- 💳 **Payment Gateway**: Not integrated yet — planned for future release.
-- The repository contains an example `.env.example`. **Do not** store secrets in repo.
-
----
-
 ## Tech Stack
-- Backend: **Laravel 12** (PHP)
-- DB: MySQL / MariaDB (configurable in `.env`)
-- Frontend: Blade templates, CSS, JS (mix / Vite depending on project setup)
-- Dev Tools: Composer, NPM, Git
+- **Backend**: **Laravel 12** (PHP)
+- **DB**: MySQL (configurable in `.env`)
+- **Frontend**: Blade templates, CSS, JS (mix / Vite depending on project setup)
+- **Integrations:** Laravel Socialite (Google Login), Payment Gateway API
+- **Dev Tools**: Composer, NPM, Git
 
 ---
 ## Admin Login Instructions
@@ -80,8 +71,8 @@
 
 ```bash
 # 1. Clone
-git clone https://github.com/<your-username>/<repo-name>.git
-cd <repo-name>
+git clone https://github.com/DhruvBamania/vegmart-laravel-12.git
+cd vegemart-laravel-12
 
 # 2. Dependencies
 composer install
@@ -89,7 +80,7 @@ npm install
 
 # 3. Environment
 cp .env.example .env
-# Edit .env: set DB_CONNECTION, DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD etc.
+# Edit .env: set set DB connection details, Google Client ID/Secret, and Payment API keys.
 
 # 4. App key, migrations, storage
 php artisan key:generate
@@ -114,21 +105,27 @@ laravel-ecommerce/
 │   ├── Http/
 │   │   ├── Controllers/
 │   │   │   ├── AdminController.php
+│   │   │   ├── CartController.php
+│   │   │   ├── DiscountController.php
+│   │   │   ├── OrderController.php
 │   │   │   └── PageController.php
 │   │   └── Middleware/
 │   ├── Models/
-│   │   ├── Category.php
-│   │   ├── Product.php
-│   │   └── User.php
+│   │   ├── address.php
+│   │   ├── cart.php
+│   │   ├── category.php
+│   │   ├── contact.php
+│   │   ├── discount.php
+│   │   ├── order.php
+│   │   ├── order_items.php
+│   │   ├── product.php
+│   │   └── user.php
 │   └── Providers/
 │
 ├── bootstrap/
 ├── config/
 ├── database/
 │   ├── migrations/
-│   │   ├── 2024_xx_xx_create_users_table.php        # create_users_table
-│   │   ├── 2024_xx_xx_create_categories_table.php   # create_categories_table
-│   │   └── 2024_xx_xx_create_products_table.php     # create_products_table
 │   └── seeders/
 │
 ├── public/
@@ -148,9 +145,17 @@ laravel-ecommerce/
 │   │   │   │   ├── footer.blade.php
 │   │   │   │   └── navbar.blade.php
 │   │   │   ├── adminProfile.blade.php
+│   │   │   ├── contact.blade.php
 │   │   │   ├── customers.blade.php
+│   │   │   ├── discounts.blade.php
 │   │   │   ├── index.blade.php
+│   │   │   ├── order.blade.php
 │   │   │   └── products.blade.php
+│   │   ├── emails/
+│   │   │   └── order-cancelled.blade.php
+│   │   │   └── order-confirmation.blade.php
+│   │   │   └── order-status.blade.php
+│   │   │   └── otp.blade.php
 │   │   ├── layouts/
 │   │   │   └── app.blade.php
 │   │   ├── pages/
@@ -160,15 +165,16 @@ laravel-ecommerce/
 │   │   │   ├── contact.blade.php
 │   │   │   ├── home.blade.php
 │   │   │   ├── login.blade.php
+│   │   │   ├── order-details.blade.php
+│   │   │   ├── order-success.blade.php
+│   │   │   ├── otp-verify.blade.php
 │   │   │   ├── profile.blade.php
 │   │   │   ├── register.blade.php
 │   │   │   ├── shop.blade.php
-│   │   │   ├── shop-detail.blade.php
-│   │   │   └── testimonial.blade.php
+│   │   │   ├── view-orders.blade.php
 │   │   └── partials/
 │   │       ├── footer.blade.php
 │   │       └── nav.blade.php
-│   └── lang/
 │
 ├── routes/
 │   ├── web.php
@@ -183,14 +189,6 @@ laravel-ecommerce/
 └── README.md
 
 ```
----
-
-## Database & Migrations
-
-- Migrations included: ```create_users_table```, ```create_categories_table```, ```create_products_table```.
-- Use ```php artisan migrate``` to create database schema.
-- If seeders exist, run ```php artisan db:seed```.
-
 ---
 
 ## Assets & Uploads
@@ -222,16 +220,8 @@ laravel-ecommerce/
 
 - Recommended production options: Laravel Forge, DigitalOcean droplet, or any shared host that supports PHP 8+ and Composer.
 - Set up queue, scheduler, and caching as needed for production performance.
-- Configure ```.env``` values for production (APP_ENV=production, APP_DEBUG=false, DB credentials, mail provider, payment gateway keys).
+- Configure ```.env``` values for production (```APP_ENV=production```, ```APP_DEBUG=false```, DB credentials, mail provider, payment gateway keys).
 - Create backups of ```storage``` and database before major updates.
-
----
-
-## Future Enhancements
-
-- Integrate Payment Gateway (Stripe/PayPal/others).
-- Full testimonials (create/approve/display).
-- Order management & email notifications.
 
 ---
 
@@ -253,3 +243,7 @@ laravel-ecommerce/
 💼 LinkedIn: [www.linkedin.com/in/dhruvbamania]  
 
 ---
+
+## License
+
+This project is open-sourced software licensed under the MIT license.
